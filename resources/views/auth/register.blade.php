@@ -21,7 +21,7 @@
             <br>
 
             <select name="role" class="form-control" required>
-                @if(auth()->user()->role === 'admin')
+                @if(auth()->user()?->role === 'admin')
                     <option value="">Selecciona un tipo de usuario</option>
                     <option value="empleado">Empleado</option>
                     <option value="admin">Administrador</option>
@@ -36,6 +36,10 @@
             <br>
 
             <button type="submit" class="btn btn-success">Guardar</button>
+
+            <a href="{{ route('acceso.store') }}" class="btn btn-secondary">
+                Inicia sesión
+            </a>
         </form>
     @endsection
 </body>

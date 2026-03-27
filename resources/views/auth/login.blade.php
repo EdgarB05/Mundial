@@ -11,5 +11,9 @@
         <br><br>
 
         <button type="submit" class="btn btn-success">Enviar</button>
+        
+        <a href="{{ route('registro') }}" class="btn btn-secondary">
+            Registrate ahora!
+        </a>
     </form>
 @endsection
