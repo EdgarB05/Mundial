@@ -13,6 +13,8 @@
         <form action="{{ route('registro.store') }}" method="POST">
             @csrf
 
+            @include('partials.alerts')
+
             <input type="text" name="name" placeholder="Nombre" class="form-control" value="{{ old('name') }}" required>
             <br>
             <input type="email" name="email" placeholder="Correo" class="form-control" value="{{ old('email') }}" required>

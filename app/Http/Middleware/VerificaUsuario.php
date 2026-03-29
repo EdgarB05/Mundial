@@ -20,7 +20,7 @@ class VerificaUsuario
         if(!Auth::check()){
             return redirect()->route('registro')
             ->with('error', 'Se debe registrar e iniciar sesión');
-
+            
         }
 
         return $next($request);
