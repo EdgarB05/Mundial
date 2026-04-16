@@ -4,11 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoletosController;
 use App\Http\Controllers\TicketmasterController;
 use App\Http\Controllers\VoluntariadoController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/registro', [AuthController::class, 'registerForm'])->name('registro');
 Route::post('/registro', [AuthController::class, 'register'])->name('registro.store');
@@ -24,7 +21,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin-dashboard', [AuthController::class, 'adminDashboard'])->name('admin-dashboard');
 
-    Route::resource('voluntariado', VoluntariadoController::class);
     Route::patch('/voluntariado/{voluntariado}/asistencia', [VoluntariadoController::class, 'marcarAsistencia'])->name('voluntariado.asistencia');
     Route::patch('/voluntariado/{voluntariado}/baja', [VoluntariadoController::class, 'baja'])->name('voluntariado.baja');
 });
@@ -42,3 +38,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/usuarios/{user}', [AuthController::class, 'destroyUser'])->name('usuarios.destroy');
 });
+
+Route::resource('voluntariado', VoluntariadoController::class);
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index']);

@@ -50,6 +50,7 @@
                         <td>
                             <a href="{{ route('voluntariado.edit', $registro) }}" class="btn btn-warning btn-sm">Editar</a>
 
+                            @if(auth()->user()->role === 'admin')
                             <form action="{{ route('voluntariado.asistencia', $registro) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('PATCH')
@@ -61,6 +62,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
