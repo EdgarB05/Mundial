@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-//Uso del modelo
 use App\Models\Boletos;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class BoletosController extends Controller
 {
-    /**
-     * Consultar a los libros en la bd
-     */
+
     public function index()
     {
-        // Obtener los datos del modelo
-        $boletos = Boletos::all();
-
+        $boletos = Boletos::latest()->get();
         return view('boletos.index', compact('boletos'));
     }
 
@@ -33,71 +28,126 @@ class BoletosController extends Controller
      */
     public function store(Request $request)
     {
-        //Esquema para enviar datos a la BD
-        Boletos::create([
-            'equipos' => $request -> equipos,
-            'estadio' => $request ->estadio,
-            'fecha' => $request ->fecha,
-            'hora' => $request ->hora,
-            'zona' => $request ->zona,
-            'fila' => $request ->fila,
-            'asiento' => $request ->asiento,            
+        $validated = $request->validate([
+            'equipos' => ['required', 'string', 'max:255'],
+            'estadio' => ['required', 'string', 'max:255'],
+            'fecha' => ['required', 'date'],
+            'hora' => ['required', 'date_format:H:i'],
+            'zona' => ['required', 'string', 'max:50'],
+            'fila' => ['required', 'integer', 'min:1'],
+            'asiento' => ['required', 'integer', 'min:1'],
         ]);
 
-        //Enviar al usuarios a otra página
-        return redirect()->route('boletos.create');
+        Boletos::create($validated);
+
+        return redirect()
+            ->route('boletos.index')
+            ->with('success', 'Boleto almacenado correctamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Boletos $boleto)
     {
-        //
+        return redirect()->route('boletos.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Boletos $boleto)
     {
-        //
         return view('boletos.edit', compact('boleto'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Boletos $boleto)
-    {
-        //
-        $request -> validate([
-            'equipos' => 'required',
-            'estadio' => 'required',
-            'fecha' => 'required',
-            'hora' => 'required',
-            'zona' => 'required',
-            'fila' => 'required',
-            'asiento' => 'required',            
+{
+    $datos = $request->validate([
+        'equipos' => 'required|string|max:255',
+        'estadio' => 'required|string|max:255',
+        'fecha' => 'required|date',
+        'hora' => 'required',
+        'zona' => 'required|string|max:50',
+        'fila' => 'required|integer|min:1',
+        'asiento' => 'required|integer|min:1',
+    ]);
 
-        ]);
+    $boleto->update($datos);
 
-        $boleto -> update($request->all());
+    return redirect()->route('boletos.index')
+        ->with('success', 'Actualización con éxito');
+}
 
-        return redirect() -> route('boletos.index')
-        -> with('success', 'Actualización con éxito');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Boletos $boleto)
     {
-        //
-        $boleto -> delete();
-        
-        return redirect() -> route('boletos.index')
-        -> with('success', 'Boleto eliminado');
+        $boleto->delete();
+
+        return redirect()
+            ->route('boletos.index')
+            ->with('success', 'Boleto eliminado correctamente.');
+    }
+
+    /* =========================
+       MÉTODOS API (JSON)
+       ========================= */
+
+    public function apiIndex(): JsonResponse
+    {
+        return response()->json([
+            'message' => 'Boletos obtenidos correctamente.',
+            'data' => Boletos::latest()->get(),
+        ]);
+    }
+
+    public function apiStore(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'equipos' => ['required', 'string', 'max:255'],
+            'estadio' => ['required', 'string', 'max:255'],
+            'fecha' => ['required', 'date'],
+            'hora' => ['required', 'date_format:H:i'],
+            'zona' => ['required', 'string', 'max:50'],
+            'fila' => ['required', 'integer', 'min:1'],
+            'asiento' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $boleto = Boletos::create($validated);
+
+        return response()->json([
+            'message' => 'Boleto almacenado correctamente.',
+            'data' => $boleto,
+        ], 201);
+    }
+
+    public function apiShow(Boletos $boleto): JsonResponse
+    {
+        return response()->json([
+            'message' => 'Boleto obtenido correctamente.',
+            'data' => $boleto,
+        ]);
+    }
+
+    public function apiUpdate(Request $request, Boletos $boleto): JsonResponse
+    {
+        $validated = $request->validate([
+            'equipos' => ['sometimes', 'required', 'string', 'max:255'],
+            'estadio' => ['sometimes', 'required', 'string', 'max:255'],
+            'fecha' => ['sometimes', 'required', 'date'],
+            'hora' => ['sometimes', 'required', 'date_format:H:i'],
+            'zona' => ['sometimes', 'required', 'string', 'max:50'],
+            'fila' => ['sometimes', 'required', 'integer', 'min:1'],
+            'asiento' => ['sometimes', 'required', 'integer', 'min:1'],
+        ]);
+
+        $boleto->update($validated);
+
+        return response()->json([
+            'message' => 'Boleto actualizado correctamente.',
+            'data' => $boleto->fresh(),
+        ]);
+    }
+
+    public function apiDestroy(Boletos $boleto): JsonResponse
+    {
+        $boleto->delete();
+
+        return response()->json([
+            'message' => 'Boleto eliminado correctamente.',
+        ]);
     }
 }

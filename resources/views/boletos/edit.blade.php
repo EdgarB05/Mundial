@@ -25,7 +25,7 @@
         <br>
         <input type="time" name="hora" value="{{ $boleto -> hora}}" placeholder="Hora" class="form-control">
         <br>
-        <input type="number" name="zona" value="{{ $boleto -> zona}}" placeholder="Zona" class="form-control">
+        <input type="text" name="zona" value="{{ $boleto->zona }}" placeholder="Zona" class="form-control">
         <br>
         <input type="number" name="fila" value="{{ $boleto -> fila}}" placeholder="Fila" class="form-control">
         <br>

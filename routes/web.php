@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BoletosController;
+use App\Http\Controllers\TicketmasterController;
+use App\Http\Controllers\VoluntariadoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,11 +22,23 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin-dashboard', [AuthController::class, 'adminDashboard'])
-        ->name('admin-dashboard');
+    Route::get('/admin-dashboard', [AuthController::class, 'adminDashboard'])->name('admin-dashboard');
+
+    Route::resource('voluntariado', VoluntariadoController::class);
+    Route::patch('/voluntariado/{voluntariado}/asistencia', [VoluntariadoController::class, 'marcarAsistencia'])->name('voluntariado.asistencia');
+    Route::patch('/voluntariado/{voluntariado}/baja', [VoluntariadoController::class, 'baja'])->name('voluntariado.baja');
 });
 
 Route::middleware(['auth', 'role:empleado'])->group(function () {
     Route::get('/empleado-dashboard', [AuthController::class, 'empleadoDashboard'])
         ->name('empleado-dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/usuarios/{user}/editar', [AuthController::class, 'editUser'])->name('usuarios.edit');
+    Route::put('/usuarios/{user}', [AuthController::class, 'updateUser'])->name('usuarios.update');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::delete('/usuarios/{user}', [AuthController::class, 'destroyUser'])->name('usuarios.destroy');
 });

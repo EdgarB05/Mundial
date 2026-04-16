@@ -70,11 +70,56 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-        return view('admin.dashboard');
+
+        // Obtener los datos del modelo
+        $users = User::all();
+
+        return view('admin.dashboard', compact('users'));
+        #return view('admin.dashboard');
     }
 
     public function empleadoDashboard()
     {
         return view('empleado.dashboard');
+    }
+
+    public function editUser(User $user)
+    {
+        return view('admin.editUser', compact('user'));
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,empleado,cliente',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
+
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $data['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($data);
+
+        return redirect()->back()->with('success', 'Usuario actualizado correctamente.');
+    }
+
+    public function destroyUser(User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return redirect()->back()->with('error', 'No puedes eliminar tu propio usuario mientras tienes sesión iniciada.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin-dashboard')->with('success', 'Usuario eliminado correctamente.');
     }
 }
