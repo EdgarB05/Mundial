@@ -52,26 +52,27 @@ class BoletosController extends Controller
 
     public function edit(Boletos $boleto)
     {
-        return view('boletos.edit', compact('boleto'));
+        return view('boletos.edit', compact('boleto'))
+            ->with('warning', 'Estás editando un boleto. Verifica los datos antes de guardar los cambios.');
     }
 
     public function update(Request $request, Boletos $boleto)
-{
-    $datos = $request->validate([
-        'equipos' => 'required|string|max:255',
-        'estadio' => 'required|string|max:255',
-        'fecha' => 'required|date',
-        'hora' => 'required',
-        'zona' => 'required|string|max:50',
-        'fila' => 'required|integer|min:1',
-        'asiento' => 'required|integer|min:1',
-    ]);
+    {
+        $datos = $request->validate([
+            'equipos' => 'required|string|max:255',
+            'estadio' => 'required|string|max:255',
+            'fecha' => 'required|date',
+            'hora' => 'required',
+            'zona' => 'required|string|max:50',
+            'fila' => 'required|integer|min:1',
+            'asiento' => 'required|integer|min:1',
+        ]);
 
-    $boleto->update($datos);
+        $boleto->update($datos);
 
-    return redirect()->route('boletos.index')
-        ->with('success', 'Actualización con éxito');
-}
+        return redirect()->route('boletos.index')
+            ->with('success', 'Actualización con éxito');
+    }
 
     public function destroy(Boletos $boleto)
     {

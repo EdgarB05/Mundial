@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserUpdateMail;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -20,7 +22,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|max:20',
-            'role' => 'required|in:cliente,empleado,admin',
+            'role' => 'required|in:cliente,admin',
             'password' => 'required|confirmed|min:8',
         ]);
 
@@ -85,7 +87,8 @@ class AuthController extends Controller
 
     public function editUser(User $user)
     {
-        return view('admin.editUser', compact('user'));
+        return view('admin.editUser', compact('user'))
+            ->with('warning', 'Estás editando información del usuario. Verifica los cambios antes de guardar.');
     }
 
     public function updateUser(Request $request, User $user)
@@ -93,23 +96,49 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'role' => 'required|in:admin,empleado,cliente',
+            'phone' => 'required|string|max:20',
+            'role' => 'required|in:admin,cliente',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
+
+        $changes = [];
+
+        if ($user->name !== $validated['name']) {
+            $changes[] = 'Nombre actualizado';
+        }
+
+        if ($user->email !== $validated['email']) {
+            $changes[] = 'Correo actualizado';
+        }
+
+        if (($user->phone ?? '') !== $validated['phone']) {
+            $changes[] = 'Teléfono actualizado';
+        }
+
+        if ($user->role !== $validated['role']) {
+            $changes[] = 'Rol actualizado';
+        }
 
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'],
             'role' => $validated['role'],
         ];
 
         if (!empty($validated['password'])) {
             $data['password'] = Hash::make($validated['password']);
+            $changes[] = 'Contraseña actualizada';
         }
 
         $user->update($data);
 
-        return redirect()->back()->with('success', 'Usuario actualizado correctamente.');
+        if (!empty($changes)) {
+            Mail::to($user->email)->send(new UserUpdateMail($user->fresh(), $changes));
+        }
+
+        return redirect()->route('usuarios.edit', $user)
+            ->with('success', 'Usuario actualizado correctamente.');
     }
 
     public function destroyUser(User $user)

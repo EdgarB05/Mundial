@@ -6,43 +6,97 @@
     <title>Registro</title>
 </head>
 <body>
-    @extends('layouts.app')
+    @extends('layouts.auth')
+
     @section('content')
-        <h1>REGISTRO DE USUARIOS</h1>
+    <div class="auth-card">
+        <div class="auth-hero">
+            <div>
+                <h1 class="auth-hero-title">Únete a la Pasión</h1>
+                <p class="auth-hero-text">Sé parte de la historia del Mundial 2026</p>
+            </div>
+        </div>
 
-        <form action="{{ route('registro.store') }}" method="POST">
-            @csrf
+        <div class="auth-body">
+            <form action="{{ route('registro.store') }}" method="POST">
+                @csrf
 
-            @include('partials.alerts')
+                @include('partials.alerts')
 
-            <input type="text" name="name" placeholder="Nombre" class="form-control" value="{{ old('name') }}" required>
-            <br>
-            <input type="email" name="email" placeholder="Correo" class="form-control" value="{{ old('email') }}" required>
-            <br>
-            <input type="text" name="phone" placeholder="Teléfono" class="form-control" value="{{ old('phone') }}" required>
-            <br>
+                <div class="mb-3">
+                    <label class="auth-label">Nombre completo</label>
+                    <div class="input-shell">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" name="name" placeholder="Ej. Juan Pérez" class="form-control" value="{{ old('name') }}" required>
+                    </div>
+                </div>
 
-            <select name="role" class="form-control" required>
-                @if(auth()->user()?->role === 'admin')
-                    <option value="">Selecciona un tipo de usuario</option>
-                    <option value="empleado">Empleado</option>
-                    <option value="admin">Administrador</option>
-                @endif
-                <option value="cliente">Cliente</option>
-            </select>
-            <br>
+                <div class="mb-3">
+                    <label class="auth-label">Correo electrónico</label>
+                    <div class="input-shell">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                        <input
+                            type="email" name="email" placeholder="correo@ejemplo.com" class="form-control" value="{{ old('email') }}" required>
+                    </div>
+                </div>
 
-            <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
-            <br>
-            <input type="password" name="password_confirmation" placeholder="Confirmar contraseña" class="form-control" required>
-            <br>
+                <div class="mb-3">
+                    <label class="auth-label">Teléfono</label>
+                    <div class="input-shell">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                        <input type="text" name="phone" placeholder="Ej. 5551234567" class="form-control" value="{{ old('phone') }}" required>
+                    </div>
+                </div>
 
-            <button type="submit" class="btn btn-success">Guardar</button>
+                <div class="mb-3">
+                    <label class="auth-label">Tipo de usuario</label>
+                    <div class="input-shell">
+                        <i class="fa-solid fa-flag input-icon"></i>
+                        <select name="role" class="form-select" required>
+                            @if(auth()->user()?->role === 'admin')
+                                <option value="">Selecciona un tipo de usuario</option>
+                                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Administrador</option>
+                            @endif
+                            <option value="cliente" {{ old('role') === 'cliente' ? 'selected' : '' }}>Cliente</option>
+                        </select>
+                    </div>
+                </div>
 
-            <a href="{{ route('acceso.store') }}" class="btn btn-secondary">
-                Inicia sesión
-            </a>
-        </form>
+                <div class="mb-3">
+                    <label class="auth-label">Contraseña</label>
+                    <div class="input-shell password-shell">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" name="password" id="password" placeholder="••••••••" class="form-control" required>
+                        <i class="fa-solid fa-eye toggle-password" data-target="password"></i>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="auth-label">Confirmar contraseña</label>
+                    <div class="input-shell password-shell">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••" class="form-control" required>
+                        <i class="fa-solid fa-eye toggle-password" data-target="password_confirmation"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-submit">
+                    Crear Cuenta <i class="fa-solid fa-arrow-right ms-2"></i>
+                </button>
+
+                <div class="auth-links">
+                    ¿Ya tengo cuenta?
+                    <a href="{{ route('acceso') }}">Iniciar Sesión</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="auth-bottom">
+            <i class="fa-solid fa-shield-halved"></i>
+            <i class="fa-solid fa-shield-heart"></i>
+            <i class="fa-solid fa-globe"></i>
+        </div>
+    </div>
     @endsection
 </body>
 </html>

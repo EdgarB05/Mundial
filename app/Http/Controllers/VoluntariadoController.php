@@ -46,7 +46,7 @@ class VoluntariadoController extends Controller
 
         Voluntariado::create($datos);
 
-        return redirect()->route('voluntariado.index')
+        return redirect()->route('voluntariado.create')
             ->with('success', 'Registro creado correctamente.');
     }
 
@@ -65,7 +65,8 @@ class VoluntariadoController extends Controller
     public function edit(Voluntariado $voluntariado)
     {
         //
-        return view('voluntarios.voluntariado-edit', compact('voluntariado'));
+        return view('voluntarios.voluntariado-edit', compact('voluntariado'))
+            ->with('warning', 'Estás editando información de voluntariado. Revisa cuidadosamente los cambios antes de guardar.');
     }
 
     /**

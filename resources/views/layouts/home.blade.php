@@ -18,9 +18,6 @@
 
         .hero-section {
             min-height: 100vh;
-            background:
-                linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
-                url('https://images.unsplash.com/photo-1508098682722-e99c643e7f0b') center/cover no-repeat;
             color: white;
             display: flex;
             align-items: center;
@@ -46,13 +43,39 @@
         }
 
         .navbar-home {
-            background: rgba(255,255,255,.9);
+            background: rgba(255,255,255,.96);
             backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .brand-logo {
+            font-weight: 900;
+            color: #1d4ed8;
+            letter-spacing: .5px;
+            text-decoration: none;
+            font-size: 1.9rem;
         }
 
         .footer-home {
-            background: #111827;
-            color: white;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            color: #64748b;
+        }
+
+        .footer-home .footer-brand {
+            font-weight: 900;
+            color: #111827;
+            font-size: 1.1rem;
+        }
+
+        .footer-home a {
+            color: #64748b;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer-home a:hover {
+            color: #2563eb;
         }
 
         .city-image,
@@ -71,9 +94,67 @@
             background: rgba(255,255,255,.12);
             color: white;
         }
+
+        @media (max-width: 768px) {
+            .brand-logo {
+                font-size: 1.4rem;
+            }
+
+            .footer-home .row > div {
+                text-align: center !important;
+                margin-bottom: 12px;
+            }
+        }
     </style>
 </head>
-<body>
-    @yield('content')
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-home shadow-sm">
+        <div class="container-fluid px-4 py-3">
+            <a href="{{ route('home') }}" class="brand-logo">FIFA WORLD CUP 2026</a>
+
+            <div class="ms-auto d-flex align-items-center gap-4">
+                <a href="{{ route('home') }}" class="text-secondary text-decoration-none fs-3">
+                    Inicio
+                </a>
+
+                <a href="{{ route('boletos.index') }}" class="text-secondary text-decoration-none fs-3">
+                    Boletos
+                </a>
+
+                @guest
+                    <a href="{{ route('acceso') }}" class="btn btn-primary px-4 py-2 fw-semibold">
+                        Iniciar sesión
+                    </a>
+                @endguest
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow-1">
+        @yield('content')
+    </main>
+
+    <footer class="footer-home py-4 mt-auto">
+        <div class="container-fluid px-4">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-start">
+                    <div class="footer-brand">FIFA World Cup 2026</div>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <a href="{{ route('home') }}">Privacy Policy</a>
+                    <a href="{{ route('home') }}">Terms of Service</a>
+                    <a href="{{ route('home') }}">Cookie Policy</a>
+                    <a href="{{ route('home') }}">Contact Us</a>
+                </div>
+
+                <div class="col-md-3 text-end">
+                    © 2026 FIFA World Cup™ - All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

@@ -10,60 +10,37 @@
 
     @section('content')
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-home fixed-top shadow-sm">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold" href="{{ route('home') }}">FIFA World Cup 2026</a>
+    <section class="hero-section position-relative">
+    
+        <img src="{{ asset('img/sofi-stadium-portrait.jpg') }}"
+            class="position-absolute w-100 h-100"
+            style="object-fit: cover; top:0; left:0; z-index:0;">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHome">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <div class="position-absolute w-100 h-100"
+            style="background: rgba(0,0,0,.5); top:0; left:0; z-index:1;"></div>
 
-            <div class="collapse navbar-collapse" id="menuHome">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('boletos.index') }}">Boletos</a></li>
-                    @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('voluntariado.index') }}">Voluntariado</a></li>
-                    @endauth
-                </ul>
-
-                <div class="d-flex">
-                    @auth
-                        <a href="{{ route('boletos.index') }}" class="btn btn-primary">Panel</a>
-                    @else
-                        <a href="{{ route('acceso') }}" class="btn btn-primary">Iniciar sesión</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <section class="hero-section">
-        <div class="container py-5">
+        <div class="container position-relative text-white py-5" style="z-index:2;">
             <div class="col-lg-7">
                 <span class="badge bg-primary mb-3 px-3 py-2">Norteamérica 2026</span>
+
                 <h1 class="display-2 fw-bold mb-4">Unidos en 2026</h1>
+
                 <p class="lead mb-4">
                     Vive el evento deportivo más grande del mundo.
                 </p>
 
-                <div class="d-flex flex-wrap gap-3">
+                <div class="d-flex gap-3">
                     <a href="{{ route('boletos.create') }}" class="btn btn-primary btn-lg">
                         Comprar boletos
                     </a>
 
-                    @auth
-                        <a href="{{ route('boletos.index') }}" class="btn hero-btn-outline btn-lg">
-                            Consultar estado
-                        </a>
-                    @else
-                        <a href="{{ route('acceso') }}" class="btn hero-btn-outline btn-lg">
-                            Consultar estado
-                        </a>
-                    @endauth
+                    <a href="{{ route('boletos.index') }}" class="btn btn-outline-light btn-lg">
+                        Consultar estado
+                    </a>
                 </div>
             </div>
         </div>
+
     </section>
 
     <section class="py-5 section-pattern">
@@ -107,7 +84,7 @@
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="card city-card h-100">
-                        <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b" class="city-image" alt="Nueva York">
+                        <img src="{{ asset('img/Metlife_stadium.jpg') }}" class="city-image" alt="Nueva York">
                         <div class="card-body">
                             <h4 class="fw-bold">Nueva York / Nueva Jersey</h4>
                             <p class="mb-0 text-muted">MetLife Stadium • Sede de la Final</p>
@@ -117,7 +94,7 @@
 
                 <div class="col-lg-3 col-md-6">
                     <div class="card city-card h-100">
-                        <img src="https://images.unsplash.com/photo-1585464231875-d9ef1f5ad396" class="city-image" alt="Ciudad de México">
+                        <img src="{{ asset('img/Estadio_Banorte.jpg') }}" class="city-image" alt="Ciudad de México">
                         <div class="card-body">
                             <h5 class="fw-bold">Ciudad de México</h5>
                         </div>
@@ -126,7 +103,7 @@
 
                 <div class="col-lg-3 col-md-6">
                     <div class="card city-card h-100">
-                        <img src="https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da" class="city-image" alt="Los Ángeles">
+                        <img src="{{ asset('img/SofiStadium.jpg') }}" class="city-image" alt="Los Ángeles">
                         <div class="card-body">
                             <h5 class="fw-bold">Los Ángeles</h5>
                         </div>
@@ -146,21 +123,21 @@
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="card news-card h-100">
-                        <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974" class="news-image" alt="Voluntariado">
+                        <img src="{{ asset('img/voluntarios.jpg') }}" class="news-image" alt="Voluntariado">
                         <div class="card-body">
                             <span class="badge bg-primary-subtle text-primary">Preparación</span>
                             <h4 class="fw-bold mt-3">El programa de voluntariado abre oficialmente</h4>
                             <p class="text-muted">
                                 Gestiona postulaciones, zonas, turnos y asistencia del personal de apoyo del estadio.
                             </p>
-                            <a href="{{ route('voluntariado.index') }}" class="btn btn-outline-primary">Ir al módulo</a>
+                            <a href="{{ route('voluntariado.create') }}" class="btn btn-outline-primary">Ir al módulo</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
                     <div class="card news-card h-100">
-                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b" class="news-image" alt="Balón">
+                        <img src="{{ asset('img/balon.jpg') }}" class="news-image" alt="Balón">
                         <div class="card-body">
                             <h5 class="fw-bold">Tecnología del balón oficial</h5>
                             <p class="text-muted mb-0">Innovación aplicada al seguimiento del juego.</p>
@@ -170,7 +147,7 @@
 
                 <div class="col-lg-3 col-md-6">
                     <div class="card news-card h-100">
-                        <img src="https://images.unsplash.com/photo-1508098682722-e99c643e7f0b" class="news-image" alt="Ciudades sede">
+                        <img src="{{ asset('img/sostenibilidad.png') }}" class="news-image" alt="Ciudades sede">
                         <div class="card-body">
                             <h5 class="fw-bold">Objetivos de sostenibilidad</h5>
                             <p class="text-muted mb-0">Operación eficiente y mejor experiencia para asistentes.</p>
@@ -193,41 +170,6 @@
             </div>
         </div>
     </section>
-
-    <footer class="footer-home py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h5 class="fw-bold">FIFA World Cup 2026</h5>
-                    <p class="text-white-50 mb-0">
-                        Sistema de gestión para boletos, voluntariado y operación del estadio.
-                    </p>
-                </div>
-
-                <div class="col-md-3">
-                    <h6 class="fw-bold">Módulos</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('boletos.index') }}" class="text-white-50 text-decoration-none">Boletos</a></li>
-                        @auth
-                            <li><a href="{{ route('voluntariado.index') }}" class="text-white-50 text-decoration-none">Voluntariado</a></li>
-                        @endauth
-                    </ul>
-                </div>
-
-                <div class="col-md-3">
-                    <h6 class="fw-bold">Acceso</h6>
-                    <ul class="list-unstyled">
-                        @auth
-                            <li><a href="{{ route('boletos.index') }}" class="text-white-50 text-decoration-none">Panel</a></li>
-                        @else
-                            <li><a href="{{ route('acceso') }}" class="text-white-50 text-decoration-none">Iniciar sesión</a></li>
-                            <li><a href="{{ route('registro') }}" class="text-white-50 text-decoration-none">Registrarse</a></li>
-                        @endauth
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
